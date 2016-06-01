@@ -3,13 +3,12 @@
 var uuid = require('node-uuid');
 var streamUtils = require('./streamUtils');
 var _ = require('lodash');
-var gcs = gcloud.storage();
 
 module.exports.init = function(config) {
 
-    var gcloud = require('gcloud')({
+    var gcs = require('gcloud')({
         projectId: config.project
-    });
+    }).storage();
 
     config = config || {};
     config.compression = config.compression || false;
