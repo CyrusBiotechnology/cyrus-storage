@@ -9,7 +9,7 @@ module.exports.writeToStorageStream = function(data, writeStream, compression, c
   readStream.write(data);
   readStream.end();
   var zip = (compression === 'gz')? zlib.createGzip() : new stream.PassThrough();
-  readStream.pipe(zip).pipe(writeStream).on('close', cb);
+  readStream.pipe(zip).pipe(writeStream).on('finish', cb);
 }
 
 module.exports.readFromStorageStream = function(readStream, compression, callback) {
