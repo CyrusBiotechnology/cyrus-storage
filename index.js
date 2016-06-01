@@ -1,4 +1,6 @@
 'use strict';
 
-var config = require('../config/environment');
-module.exports = require('../storage/' + config.storage.backend + '.js');
+
+module.exports.init = function(storageType, config) {
+  return require('./' + storageType + '.js').init(config);
+}

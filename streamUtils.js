@@ -1,13 +1,12 @@
 'use strict';
 var stream = require('stream');
-var config = require('../config/environment');
 var zlib = require('zlib');
 
-module.exports.writeToStorageStream = function(data, writeStream) {
+module.exports.writeToStorageStream = function(data, writeStream, compression) {
   var readStream = new stream.PassThrough();
   readStream.write(data);
   readStream.end();
-  var zip = (config.storage.compression === 'gz')? zlib.createGzip() : new stream.PassThrough();
+  var zip = (compression === 'gz')? zlib.createGzip() : new stream.PassThrough();
   readStream.pipe(zip).pipe(writeStream);
 }
 
