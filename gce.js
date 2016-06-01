@@ -3,7 +3,7 @@
 var uuid = require('node-uuid');
 var streamUtils = require('./streamUtils');
 
-export function init(config) {
+module.exports.init = function(config) {
 
     var gcloud = require('gcloud')({
         projectId: config.project
@@ -17,9 +17,9 @@ export function init(config) {
             var extension = config.extension + (config.compression) ? 'gz' : '';
             var path = uuid.v4() + extension;
             var writeStream = bucket.file(path).createWriteStream();
-            streamUtils.writeToStorageStream(data, writeStream, config.compression);
-            return path;
-
+            streamUtils.writeToStorageStream(data, writeStream, config.compression, () => {
+              return path;
+            });
         },
 
         retrieve: function(path, callback) {

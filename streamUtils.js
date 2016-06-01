@@ -1,13 +1,15 @@
 'use strict';
 var stream = require('stream');
 var zlib = require('zlib');
+var _ = require('lodash');
 
-module.exports.writeToStorageStream = function(data, writeStream, compression) {
+module.exports.writeToStorageStream = function(data, writeStream, compression, callback) {
+  var cb = callback || _.noop;
   var readStream = new stream.PassThrough();
   readStream.write(data);
   readStream.end();
   var zip = (compression === 'gz')? zlib.createGzip() : new stream.PassThrough();
-  readStream.pipe(zip).pipe(writeStream);
+  readStream.pipe(zip).pipe(writeStream).on('close', cb);
 }
 
 module.exports.readFromStorageStream = function(readStream, compression, callback) {
