@@ -13,37 +13,38 @@ function _uploadToGcs(data, bucket, filename, compression, callback) {
 }
 
 module.exports.init = function(config) {
-    config = config || {};
-    config.compression = config.compression || false;
-    config.extension = config.extension || '.txt';
+    _config = _.merge(config, {
+      compression: false,
+      extension: '.txt'
+    });
 
-    assert.ok(config.project, 'Project ID is a mandary argument.');
+    assert.ok(_config.project, 'Project ID is a mandary argument.');
 
     var gcs = require('gcloud')({
-        projectId: config.project
+        projectId: _config.project
     }).storage();
 
     return {
         store: function(data, bucketId, callback) {
             var callback = callback || bucketId;
-            var bucketId = (typeof(bucketId) == 'function') ? config.bucketId : bucketId;
+            var bucketId = (typeof(bucketId) == 'function') ? _config.bucketId : bucketId;
             assert.ok(callback, 'callback missing.');
             assert.ok(bucketId, 'missing bucket id');
 
-            var extension = config.extension + (config.compression) ? '.gz' : '';
+            var extension = _config.extension + (_config.compression) ? '.gz' : '';
             var filename = uuid.v4() + extension;
 
             var bucket = gcs.bucket(bucketId);
 
             bucket.exists((err, exists) => {
                 if (exists) {
-                    _uploadToGcs(data, bucket, filename, config.compression, () => {
+                    _uploadToGcs(data, bucket, filename, _config.compression, () => {
                         callback(bucket.name + '/' + filename);
                     });
                 } else {
                     gcs.createBucket(bucketId, function(err, bucket) {
                         if (!err) {
-                            _uploadToGcs(data, bucket, filename, config.compression, () => {
+                            _uploadToGcs(data, bucket, filename, _config.compression, () => {
                                 callback(bucket.name + '/' + filename);
                             });
                         } else {
