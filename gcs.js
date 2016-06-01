@@ -5,10 +5,17 @@ var streamUtils = require('./streamUtils');
 var _ = require('lodash');
 var assert = require('assert');
 
+
+
+function _uploadToGcs(data, bucket, filename, compression, callback) {
+    var writeStream = bucket.file(filename).createWriteStream();
+    streamUtils.writeToStorageStream(data, writeStream, compression, callback);
+}
+
 module.exports.init = function(config) {
-  config = config || {};
-  config.compression = config.compression || false;
-  config.extension = config.extension || '.txt';
+    config = config || {};
+    config.compression = config.compression || false;
+    config.extension = config.extension || '.txt';
 
     assert.ok(config.project, 'Project ID is a mandary argument.');
 
@@ -18,17 +25,33 @@ module.exports.init = function(config) {
 
     return {
         store: function(data, bucketId, callback) {
-          var callback = callback || bucketId;
-          var bucketId = (typeof(bucketId) == 'function')? config.bucketId : bucketId;
-          assert.ok(callback, 'callback missing.');
-          assert.ok(bucketId, 'missing bucket id');
+            var callback = callback || bucketId;
+            var bucketId = (typeof(bucketId) == 'function') ? config.bucketId : bucketId;
+            assert.ok(callback, 'callback missing.');
+            assert.ok(bucketId, 'missing bucket id');
 
-            var bucket = gcs.bucket(bucketId);
             var extension = config.extension + (config.compression) ? '.gz' : '';
             var filename = uuid.v4() + extension;
-            var writeStream = bucket.file(filename).createWriteStream();
-            streamUtils.writeToStorageStream(data, writeStream, config.compression, () => {
-              callback(bucketId + '/' + filename);
+
+            var bucket = gcs.bucket(bucketId);
+
+            bucket.exists((err, exists) => {
+                if (exists) {
+                    _uploadToGcs(data, bucket, filename, config.compression, () = ? {
+                        callback(bucket.name + '/' + filename);
+                    });
+                } else {
+                    gcs.createBucket(bucketId, function(err, bucket) {
+                        if (!err) {
+                            _uploadToGcs(data, bucket, filename, config.compression, () = ? {
+                                callback(bucket.name + '/' + filename);
+                            });
+                        } else {
+                            console.log('Unable to create bucket');
+                            throw Error(err);
+                        }
+                    });
+                }
             });
         },
 
