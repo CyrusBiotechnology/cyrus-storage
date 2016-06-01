@@ -6,10 +6,10 @@ var STORAGE = {};
 
 module.exports.init = function init(config) {
     return {
-        store: function(data) {
-            var path = uuid.v4();
+        store: function(data, prefix, callback) {
+            var path = prefix + '/' + uuid.v4();
             STORAGE[path] = data;
-            return path;
+            callback(path);
         },
 
         retrieve: function(path, callback) {

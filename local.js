@@ -4,21 +4,28 @@ var uuid = require('node-uuid');
 var fs = require('fs');
 var streamUtils = require('./streamUtils');
 var _ = require('lodash');
-
+var assert = require('assert');
 
  module.exports.init = function(config) {
-
-    if (!fs.existsSync(config.dir)) {
-        fs.mkdirSync(config.dir);
-    }
+   config = config || {};
+   config.dir = config.dir || './local_storage';
 
     return {
-        store: function(data) {
+        store: function(data, dir, callback) {
+            var callback = callback || dir;
+            var dir = (typeof(dir) == 'function')? config.dir : dir;
+            assert.ok(callback);
+            assert.ok(dir);
+
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+            }
+
             var extension = config.extension + (config.compression) ? 'gz' : '';
-            var path = config.dir + '/' + uuid.v4() + extension;
+            var path = dir + '/' + uuid.v4() + extension;
             var writeStream = fs.createWriteStream(path);
             streamUtils.writeToStorageStream(data, writeStream, config.compression, () => {
-              return path;
+              callback(path);
             });
         },
 
