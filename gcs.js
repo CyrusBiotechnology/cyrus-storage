@@ -13,7 +13,7 @@ function _uploadToGcs(data, bucket, filename, compression, callback) {
 }
 
 module.exports.init = function(config) {
-    _config = _.merge(config, {
+    var _config = _.merge(config, {
       compression: false,
       extension: '.txt'
     });
@@ -31,7 +31,7 @@ module.exports.init = function(config) {
             assert.ok(callback, 'callback missing.');
             assert.ok(bucketId, 'missing bucket id');
 
-            var extension = _config.extension + (_config.compression) ? '.gz' : '';
+            var extension = _config.extension + ((_config.compression)? '.gz' : '');
             var filename = uuid.v4() + extension;
 
             var bucket = gcs.bucket(bucketId);
