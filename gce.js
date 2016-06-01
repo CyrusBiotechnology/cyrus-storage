@@ -10,7 +10,7 @@ module.exports.init = function(config) {
   config.compression = config.compression || false;
   config.extension = config.extension || '.txt';
 
-    assert.ok(config.project);
+    assert.ok(config.project, 'Project ID is a mandary argument.');
 
     var gcs = require('gcloud')({
         projectId: config.project
@@ -20,8 +20,8 @@ module.exports.init = function(config) {
         store: function(data, bucketId, callback) {
           var callback = callback || bucketId;
           var bucketId = (typeof(bucketId) == 'function')? config.bucketId : bucketId;
-          assert.ok(callback);
-          assert.ok(bucketId);
+          assert.ok(callback, 'callback missing.');
+          assert.ok(bucketId, 'missing bucket id');
 
             var bucket = gcs.bucket(bucketId);
             var extension = config.extension + (config.compression) ? '.gz' : '';
