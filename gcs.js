@@ -10,7 +10,6 @@ var assert = require('assert');
 function _uploadToGcs(data, bucket, filename, compression, callback) {
     var writeStream = bucket.file(filename).createWriteStream();
     streamUtils.writeToStorageStream(data, writeStream, compression, callback);
-    console.log('~~~~');
 }
 
 module.exports.init = function(config) {
@@ -40,14 +39,12 @@ module.exports.init = function(config) {
                 if (exists) {
                     _uploadToGcs(data, bucket, filename, config.compression, () => {
                         callback(bucket.name + '/' + filename);
-                        console.log('bar', bucket.name + '/' + filename);
                     });
                 } else {
                     gcs.createBucket(bucketId, function(err, bucket) {
                         if (!err) {
                             _uploadToGcs(data, bucket, filename, config.compression, () => {
                                 callback(bucket.name + '/' + filename);
-                                console.log('foo', bucket.name + '/' + filename);
                             });
                         } else {
                             console.log('Unable to create bucket');
