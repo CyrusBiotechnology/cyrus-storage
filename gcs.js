@@ -37,13 +37,13 @@ module.exports.init = function(config) {
 
             bucket.exists((err, exists) => {
                 if (exists) {
-                    _uploadToGcs(data, bucket, filename, config.compression, () = ? {
+                    _uploadToGcs(data, bucket, filename, config.compression, () => {
                         callback(bucket.name + '/' + filename);
                     });
                 } else {
                     gcs.createBucket(bucketId, function(err, bucket) {
                         if (!err) {
-                            _uploadToGcs(data, bucket, filename, config.compression, () = ? {
+                            _uploadToGcs(data, bucket, filename, config.compression, () => {
                                 callback(bucket.name + '/' + filename);
                             });
                         } else {
