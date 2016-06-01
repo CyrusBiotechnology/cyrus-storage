@@ -3,16 +3,18 @@
 var uuid = require('node-uuid');
 var streamUtils = require('./streamUtils');
 var _ = require('lodash');
+var assert = require('assert');
 
 module.exports.init = function(config) {
+  config = config || {};
+  config.compression = config.compression || false;
+  config.extension = config.extension || '.txt';
+
+    assert.ok(config.project);
 
     var gcs = require('gcloud')({
         projectId: config.project
     }).storage();
-
-    config = config || {};
-    config.compression = config.compression || false;
-    config.extension = config.extension || '.txt';
 
     return {
         store: function(data, bucketId, callback) {
