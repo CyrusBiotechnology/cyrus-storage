@@ -8,7 +8,7 @@ var assert = require('assert');
 
  module.exports.init = function(config) {
    var _config = _.merge(config, {
-     dir: './local_storage'
+     bucketDir: './local_storage'
    });
 
     return {
