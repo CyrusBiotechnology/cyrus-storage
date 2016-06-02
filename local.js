@@ -12,15 +12,17 @@ var assert = require('assert');
    });
 
     return {
-        store: function(data, dir, callback) {
-            var callback = callback || dir;
-            var dir = (typeof(dir) == 'function')? _config.dir : dir;
-            assert.ok(callback);
-            assert.ok(dir);
+        store: function(data, bucketDir, dir, filename, callback) {
 
-            if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir);
-            }
+
+            var callback = callback || filename || dir || bucketDir;
+            var dir = ((typeof(dir) == 'function') || (dir === undefined)) ? _config.dir : dir;
+            var bucketDir = ((typeof(bucketDir) == 'function') || (bucketDir === undefined)) ? _config.bucketDir : bucketDir;
+            var extension = _config.extension + ((_config.compression)? '.gz' : '');
+            var filename = ((typeof(filename) == 'function') || (filename === undefined)) ?  (uuid.v4() + extension) : filename;
+	    var path = ((dir)? (dir + '/') : '') + filename; 
+            assert.ok(callback, 'callback missing.');
+            assert.ok(bucketDir, 'missing bucket dir');
 
             var extension = _config.extension + (_config.compression) ? 'gz' : '';
             var path = dir + '/' + uuid.v4() + extension;
