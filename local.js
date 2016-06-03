@@ -7,9 +7,9 @@ var _ = require('lodash');
 var assert = require('assert');
 
  module.exports.init = function(config) {
-   var _config = _.merge(config, {
+   var _config = _.merge({
      bucketDir: './local_storage'
-   });
+   }, config);
 
     return {
         store: function(data, bucketDir, dir, filename, callback) {
