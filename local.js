@@ -20,12 +20,13 @@ var assert = require('assert');
             var bucketDir = ((typeof(bucketDir) == 'function') || (bucketDir === undefined)) ? _config.bucketDir : bucketDir;
             var extension = _config.extension + ((_config.compression)? '.gz' : '');
             var filename = ((typeof(filename) == 'function') || (filename === undefined)) ?  (uuid.v4() + extension) : filename;
-            var splitPath = (dir)? [bucketDir, dir, filename] : [bucketDir, filename];
-            var path = _.join(splitPath, '/');
+            var path = _.join((dir)? [bucketDir, dir, filename] : [bucketDir, filename], '/');
             assert.ok(callback, 'callback missing.');
             assert.ok(bucketDir, 'missing bucket dir');
             assert.ok(filename, 'missing filename ');
 
+            var splitPath = _.split(path, '/');
+            console.log(splitPath);
             _(_.map(
               _.range(splitPath.length-1),
               (i) => {return _.join(_.slice(splitPath,0,i+1), '/')}
