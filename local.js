@@ -26,7 +26,6 @@ var assert = require('assert');
             assert.ok(filename, 'missing filename ');
 
             var splitPath = _.split(path, '/');
-            console.log(splitPath);
             _(_.map(
               _.range(splitPath.length-1),
               (i) => {return _.join(_.slice(splitPath,0,i+1), '/')}
@@ -46,7 +45,7 @@ var assert = require('assert');
 
         retrieve: function(path, callback) {
             var readStream = fs.createReadStream(path);
-            var compression = path.endsWith('.gz') ? 'gz' : undefined;
+            var compression = path.endsWith('.gz');
             streamUtils.readFromStorageStream(readStream, compression, function(data) {
                 callback(data);
             });

@@ -8,12 +8,12 @@ module.exports.writeToStorageStream = function(data, writeStream, compression, c
   var readStream = new stream.PassThrough();
   readStream.write(data);
   readStream.end();
-  var zip = (compression === 'gz')? zlib.createGzip() : new stream.PassThrough();
+  var zip = (compression)? zlib.createGzip() : new stream.PassThrough();
   readStream.pipe(zip).pipe(writeStream).on('finish', cb);
 }
 
 module.exports.readFromStorageStream = function(readStream, compression, callback) {
-  var unzip = (compression === 'gz')? zlib.createGunzip(): new stream.PassThrough();
+  var unzip = (compression)? zlib.createGunzip(): new stream.PassThrough();
   readStream.pipe(unzip);
   var data = '';
   unzip

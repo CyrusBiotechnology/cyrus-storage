@@ -33,6 +33,11 @@ describe('Local storage', function() {
         local = storage.init('local', {
             bucketDir: 'mocha_test1'
         });
+
+        localZiped = storage.init('local', {
+            bucketDir: 'mocha_test_compressed',
+            compression: true
+        });
     });
 
     describe('Testing storage on local filesystem.', function() {
@@ -103,10 +108,24 @@ describe('Local storage', function() {
             });
         });
 
+        it('should save data to a compressed file.', function(done) {
+            localZiped.store('Hello World!', 'mocha_test2', 'folderA/folderB', function(path) {
+                expect(path).to.match(/^mocha_test2\/folderA\/folderB/);
+                expect(path).not.to.match(/undefined/);
+                expect(file(path)).to.exist;
+                expect(file(path)).not.to.contain('Hello World!');
+                local.retrieve(path, function(data) {
+                    expect(data).to.contain('Hello World!');
+                    done();
+                });
+            });
+        });
+
     });
 
     after(function() {
         deleteFolderRecursive('mocha_test2');
         deleteFolderRecursive('mocha_test1');
+        deleteFolderRecursive('mocha_test_compressed');
     });
 });
