@@ -32,7 +32,7 @@ module.exports.init = function(config) {
             var bucketId = ((typeof(bucketId) == 'function') || (bucketId === undefined)) ? _config.bucketId : bucketId;
             var extension = _config.extension + ((_config.compression)? '.gz' : '');
             var filename = ((typeof(filename) == 'function') || (filename === undefined)) ?  (uuid.v4() + extension) : filename;
-	    var path = ((dir)? (dir + '/') : '') + filename; 
+	          var path = ((dir)? (dir + '/') : '') + filename;
             assert.ok(callback, 'callback missing.');
             assert.ok(bucketId, 'missing bucket id');
 
@@ -65,7 +65,7 @@ module.exports.init = function(config) {
             var filename = _.join(_.slice(splitPath, 1), '/');
             var bucket = gcs.bucket(bucketId);
             var readStream = bucket.file(filename).createReadStream();
-            var compression = (path.endsWith('.gz')) ? 'gz' : undefined;
+            var compression = path.endsWith('.gz');
             streamUtils.readFromStorageStream(readStream, compression, function(data) {
                 callback(data);
             });
