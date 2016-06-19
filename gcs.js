@@ -17,7 +17,7 @@ module.exports.init = function(config) {
       compression: false,
       extension: '.txt',
       dir: '',
-      metadata: {'contentType: 'text/plain'},
+      metadata: {contentType: 'text/plain'},
     });
 
     assert.ok(_config.project, 'Project ID is a mandary argument.');
