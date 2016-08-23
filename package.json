@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "gcloud": "^0.34.0",
+    "gcloud": "^0.37.0",
     "lodash": "^4.13.1",
     "node-uuid": "^1.4.7"
   },
