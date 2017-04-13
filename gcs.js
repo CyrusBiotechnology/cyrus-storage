@@ -4,7 +4,7 @@ var uuid = require('node-uuid');
 var streamUtils = require('./streamUtils');
 var _ = require('lodash');
 var assert = require('assert');
-
+var storage = require('@google-cloud/storage');
 
 
 function _uploadToGcs(data, bucket, filename, compression, callback) {
@@ -21,9 +21,9 @@ module.exports.init = function(config) {
 
     assert.ok(_config.project, 'Project ID is a mandary argument.');
 
-    var gcs = require('gcloud')({
+    var gcs = storage({
         projectId: _config.project
-    }).storage();
+    });
 
     return {
         store: function(data, bucketId, dir, filename, callback) {
