@@ -7,8 +7,8 @@ var assert = require('assert');
 var storage = require('@google-cloud/storage');
 
 
-function _uploadToGcs(data, bucket, filename, compression, callback) {
-    var writeStream = bucket.file(filename).createWriteStream();
+function _uploadToGcs(data, bucket, filename, compression, metadata, callback) {
+    var writeStream = bucket.file(filename).createWriteStream({metadata:metadata});
     streamUtils.writeToStorageStream(data, writeStream, compression, callback);
 }
 
@@ -16,7 +16,8 @@ module.exports.init = function(config) {
     var _config = _.merge(config, {
       compression: false,
       extension: '.txt',
-      dir: ''
+      dir: '',
+      metadata: {contentType: 'text/plain'},
     });
 
     assert.ok(_config.project, 'Project ID is a mandary argument.');
@@ -41,13 +42,13 @@ module.exports.init = function(config) {
 
             bucket.exists((err, exists) => {
                 if (exists) {
-                    _uploadToGcs(data, bucket, path, _config.compression, () => {
+                    _uploadToGcs(data, bucket, path, _config.compression, config.metadata, () => {
                         callback(bucket.name + '/' + path);
                     });
                 } else {
                     gcs.createBucket(bucketId, function(err, bucket) {
                         if (!err) {
-                            _uploadToGcs(data, bucket, path, _config.compression, () => {
+                            _uploadToGcs(data, bucket, path, _config.compression, config.metadata, () => {
                                 callback(bucket.name + path);
                             });
                         } else {
