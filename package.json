@@ -1,22 +1,23 @@
 {
-  "name": "cyrus-storage",
-  "version": "1.1.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Javier Castellanos",
-  "dependencies": {
-    "@google-cloud/storage": "^1.0.0",
-    "lodash": "^4.13.1",
-    "node-uuid": "^1.4.7"
-  },
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "chai-files": "^1.2.0",
-    "grunt": "^1.0.1",
-    "grunt-mocha-test": "^0.12.7",
-    "mocha": "^2.5.3"
-  }
+    "name": "cyrus-storage",
+    "version": "1.2.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Javier Castellanos",
+    "dependencies": {
+        "@google-cloud/storage": "^1.5.2",
+        "grunt-cli": "^1.2.0",
+        "lodash": "^4.13.1",
+        "node-uuid": "^1.4.7"
+    },
+    "devDependencies": {
+        "chai": "^3.5.0",
+        "chai-files": "^1.2.0",
+        "grunt": "^1.0.1",
+        "grunt-mocha-test": "^0.12.7",
+        "mocha": "^2.5.3"
+    }
 }
