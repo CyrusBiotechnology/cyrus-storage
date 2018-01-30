@@ -45,7 +45,6 @@ describe ("google cloud storage", function() {
     });
 
     it("Should delete a data file", function(done) {
-console.log(path);
       gcs.delete(path, function() {
         gcs.retrieve(path, function(data) {
           expect(data).not.to.contain(content);
