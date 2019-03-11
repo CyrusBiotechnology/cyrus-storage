@@ -8,7 +8,7 @@
     },
     "author": "Javier Castellanos",
     "dependencies": {
-        "@google-cloud/storage": "^1.5.2",
+        "@google-cloud/storage": "1.5.2",
         "grunt-cli": "^1.2.0",
         "lodash": "^4.13.1",
         "node-uuid": "^1.4.7"
